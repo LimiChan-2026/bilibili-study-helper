@@ -1,0 +1,18 @@
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build
+node_modules/
+dist/
+*.log
+
+# 原始草稿（仓库以 .user.js 为准）
+B站插件.txt
