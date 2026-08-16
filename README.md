@@ -25,7 +25,7 @@ B站（bilibili）学习辅助油猴脚本——去广告、自动记录学习�
 1. 安装 [Tampermonkey](https://www.tampermonkey.net/) 浏览器扩展
 2. 点击以下链接，Tampermonkey 会自动弹出安装确认：
 
-[🔗 一键安装 v6.2](https://cdn.jsdelivr.net/gh/LimiChan-2026/bilibili-study-helper@main/bilibili-study-helper.user.js)
+[🔗 一键安装 v6.2](https://raw.githubusercontent.com/LimiChan-2026/bilibili-study-helper/main/bilibili-study-helper.user.js)
 
 ### 方式二：手动安装
 
