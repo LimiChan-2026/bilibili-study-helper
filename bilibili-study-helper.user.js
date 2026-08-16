@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         B站学习进度助手 (Bilibili Study Helper)
 // @namespace    https://github.com/LimiChan-2026
-// @version      6.1
-// @description  精修版：极简UI、自动记录时长、2-4倍速锁定（修复原生倍速菜单点击失效Bug）
+// @version      6.2
+// @description  精修版：极简UI、自动记录时长、2-4倍速锁定，兼容标题不以数字开头的视频合集
 // @author       LimiChan
 // @match        *://www.bilibili.com/*
 // @icon         https://www.bilibili.com/favicon.ico
@@ -13,6 +13,8 @@
 // @license      MIT
 // @updateURL    https://raw.githubusercontent.com/LimiChan-2026/bilibili-study-helper/main/bilibili-study-helper.user.js
 // @downloadURL  https://raw.githubusercontent.com/LimiChan-2026/bilibili-study-helper/main/bilibili-study-helper.user.js
+// @run-at       document-idle
+// @noframes
 // ==/UserScript==
 
 (function() {
@@ -269,17 +271,18 @@
     }
 
     function getActiveEpisodeIndex() {
-        let activeEl = document.querySelector('.video-pod__item.active') || document.querySelector('.list-box li.on') || document.querySelector('li[data-select="true"]');
+        const activeEl = document.querySelector('.video-pod__item.active') || document.querySelector('.list-box li.on') || document.querySelector('li[data-select="true"]');
         if (activeEl) {
-            const text = activeEl.innerText;
-            const match = text.match(/^(\d+)/);
-            if (match) return parseInt(match[1]);
-            let idx = 0; let el = activeEl;
-            while ((el = el.previousElementSibling) != null) idx++;
-            return idx + 1;
+            let selector = 'li[data-select="true"]';
+            if (activeEl.matches('.video-pod__item')) selector = '.video-pod__item';
+            else if (activeEl.matches('.list-box li')) selector = '.list-box li';
+
+            const items = Array.from(document.querySelectorAll(selector));
+            const index = items.indexOf(activeEl);
+            if (index !== -1) return index + 1;
         }
         const pParam = new URLSearchParams(location.search).get('p');
-        return pParam ? parseInt(pParam) : -1;
+        return pParam ? parseInt(pParam, 10) : -1;
     }
 
     function systemMonitor() {
@@ -345,12 +348,14 @@
         if(!items.length) items = document.querySelectorAll('.list-box li');
         if(!items.length) { box.style.display='block'; box.innerHTML="<span style='color:red'>列表未加载</span>"; return; }
         let total=0, count=0;
-        items.forEach(item => {
+        items.forEach((item, index) => {
             const txt = item.innerText;
-            const titleMatch = txt.match(/^(\d+)/);
-            let currentNum = titleMatch ? parseInt(titleMatch[1]) : -1;
-            if (currentNum !== -1 && currentNum >= sInput && currentNum <= eInput) {
-                const m = txt.match(/(\d{1,2}:\d{2}:\d{2}|\d{1,2}:\d{2})/);
+            // 输入范围与 B 站 URL 的 p 参数保持一致，始终按合集列表位置编号。
+            // 例如“第2章-01-什么是提示词Prompt”是列表第5项，应视为 p=5。
+            const currentNum = index + 1;
+            if (currentNum >= sInput && currentNum <= eInput) {
+                const durationText = item.querySelector('.duration')?.textContent || txt;
+                const m = durationText.match(/(\d{1,2}:\d{2}:\d{2}|\d{1,2}:\d{2})/);
                 if(m) {
                     const p = m[0].split(':').map(Number);
                     total += p.length===3 ? p[0]*3600+p[1]*60+p[2] : p[0]*60+p[1];
@@ -359,7 +364,7 @@
             }
         });
         box.style.display='block';
-        if(count===0) box.innerHTML = "无数据 (未匹配到序号)";
+        if(count===0) box.innerHTML = "无数据（所选范围内未读取到时长）";
         else box.innerHTML = `<div class="result-line">✅ 统计：第${sInput}-${eInput}集 (${count}集)</div><div class="result-highlight">${formatSecondsToHMS(total)}</div>`;
     };
 
