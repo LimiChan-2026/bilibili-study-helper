@@ -20,6 +20,16 @@ B站（bilibili）学习辅助油猴脚本——去广告、自动记录学习�
 
 ## 安装方法
 
+### 安装前：允许用户脚本（Chrome / Edge）
+
+使用 Chrome、Edge 等 Chromium 浏览器以及 Tampermonkey 5.3+ 时，请先授予用户脚本执行权限：
+
+1. 右键点击浏览器工具栏中的 **Tampermonkey** 图标
+2. 选择 **管理扩展程序**
+3. 打开 **允许用户脚本（Allow User Scripts）**
+
+如果扩展设置中没有该开关，请打开 `chrome://extensions` 或 `edge://extensions`，启用页面右上角的 **开发者模式**。否则即使脚本显示安装成功，也可能完全不执行。详见 [Tampermonkey 官方说明](https://www.tampermonkey.net/faq.php?q=Q209)。
+
 ### 方式一：一键安装（推荐）
 
 1. 安装 [Tampermonkey](https://www.tampermonkey.net/) 浏览器扩展
