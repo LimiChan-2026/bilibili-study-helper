@@ -2,7 +2,7 @@
 
 B站（bilibili）学习辅助油猴脚本——去广告、自动记录学习时长、锁定 2-4 倍速、统计看板与集数时长计算，一站搞定。
 
-![版本](https://img.shields.io/badge/version-6.1-blue)
+![版本](https://img.shields.io/badge/version-6.2-blue)
 ![协议](https://img.shields.io/badge/license-MIT-green)
 ![兼容](https://img.shields.io/badge/Tampermonkey-支持-brightgreen)
 
@@ -15,7 +15,7 @@ B站（bilibili）学习辅助油猴脚本——去广告、自动记录学习�
 | 📺 **极简悬浮球** | 视频页右上角显示可拖拽、可最小化的助手面板 |
 | ⏱️ **自动记录时长** | 静默后台每秒检测播放状态，自动累加当日学习秒数（基于 `GM_setValue` 本地存储） |
 | ⚙️ **2-4 倍速锁定** | 自定义倍速并强力锁定，修复 B站原生倍速菜单点击失效 Bug；点击原生倍速选项即自动解除锁定 |
-| 🧮 **计算时长** | 输入起始/目标集数，自动统计区间内各集时长总和（解析列表中的 `mm:ss` / `hh:mm:ss`） |
+| 🧮 **计算时长** | 输入起始/目标集数，按多P列表顺序统计区间内各集时长，兼容“第2章-01-…”等非纯数字标题 |
 | 🚀 **1.75x 快捷项** | 自动在倍速菜单注入 1.75x 选项 |
 
 ## 安装方法
@@ -25,7 +25,7 @@ B站（bilibili）学习辅助油猴脚本——去广告、自动记录学习�
 1. 安装 [Tampermonkey](https://www.tampermonkey.net/) 浏览器扩展
 2. 点击以下链接，Tampermonkey 会自动弹出安装确认：
 
-[🔗 一键安装 v6.1](https://cdn.jsdelivr.net/gh/LimiChan-2026/bilibili-study-helper@main/bilibili-study-helper.user.js)
+[🔗 一键安装 v6.2](https://cdn.jsdelivr.net/gh/LimiChan-2026/bilibili-study-helper@main/bilibili-study-helper.user.js)
 
 ### 方式二：手动安装
 
@@ -63,6 +63,12 @@ B站（bilibili）学习辅助油猴脚本——去广告、自动记录学习�
 - 自动更新通过 GitHub Raw / jsDelivr 实现
 
 ## 更新日志
+
+### v6.2 (2026-08-16)
+- 修复标题不以数字开头时，视频合集无法统计时长的问题
+- 集数范围统一按多P列表顺序计算，与 URL 的 `p` 参数保持一致
+- 优先从专用时长节点读取 `mm:ss` / `hh:mm:ss`
+- 增加 `document-idle` 注入时机并避免 iframe 重复运行
 
 ### v6.1 (2026-07-08)
 - 首次开源发布
